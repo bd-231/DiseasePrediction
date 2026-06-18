@@ -1,0 +1,15 @@
+{
+  "MAE": 2.4124,
+  "RMSE": 3.1283,
+  "R2": 0.0939,
+  "features": [
+    "drug_enc",
+    "cond_enc",
+    "log_useful",
+    "avg_rating_grp",
+    "log_review_count"
+  ],
+  "ranking_alpha": 0.7,
+  "primary_min_reviews": 5,
+  "fallback_min_reviews": 3
+}

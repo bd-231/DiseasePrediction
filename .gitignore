@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+venv/
+.env
+.env.*
+
+# Backend runtime files
+backend/healthcare.db
+
+# Data files not required for app runtime
+data/raw/
+data/processed/*_clean.csv
+
+# Notebooks and local analysis
+notebooks/
+
+# Large model file excluded due to GitHub file size limits
+models/drug_rf_regressor.pkl
+
+# Node / frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# VS Code / editor
+.vscode/
+.idea/
+.DS_Store
+
+# Misc
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
