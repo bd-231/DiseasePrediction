@@ -86,16 +86,6 @@ export default function AdminDashboard() {
               <UserTable users={users} onRefresh={fetchDashboardData} />
             </>
           )}
-
-          {activeTab === 'analytics' && (
-            <>
-              <div>
-                <h1 className="text-2xl font-bold text-primary-800">Analytics</h1>
-                <p className="text-slate-500 text-sm">Detailed performance graphs and prediction insights</p>
-              </div>
-              <AnalyticsCharts analytics={analytics} />
-            </>
-          )}
         </div>
       )}
 

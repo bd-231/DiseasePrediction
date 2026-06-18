@@ -5,7 +5,6 @@ const menuItems = {
   admin: [
     { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { key: 'users', label: 'Users', icon: Users },
-    { key: 'analytics', label: 'Analytics', icon: BarChart3 },
   ],
   doctor: [
     { key: 'queue', label: 'Patient Queue', icon: ListChecks },
