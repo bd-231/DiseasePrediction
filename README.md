@@ -53,12 +53,6 @@ npm install
 cd ..
 ```
 
-4. (Recommended) Install Git LFS and pull LFS objects if the repo uses it:
-
-```bash
-git lfs install
-git lfs pull
-```
 
 Note: If you cannot use Git LFS, download the required model artifacts externally and place them into `models/`.
 
