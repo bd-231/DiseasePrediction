@@ -128,40 +128,14 @@ npm run dev
 
 Default dev URL: `http://localhost:5173` (Vite)
 
-## Git LFS and Large Files
-
-This repo may contain large model artifacts or dataset files. GitHub recommends using Git LFS for files larger than ~50MB.
-
-To enable LFS for CSVs or model files:
-
-```bash
-git lfs install
-git lfs track "data/raw/*.csv"
-git lfs track "models/*"
-git add .gitattributes
-git add -A
-git commit -m "Move raw CSVs to Git LFS"
-git push origin main
-```
-
-If large files are already committed, consider using `git lfs migrate` to rewrite history (careful: this rewrites commits and affects collaborators).
 
 ## Troubleshooting
 
 - If a notebook raises FileNotFoundError: confirm you ran notebooks from the repository root and that `DATA` is set to `data/raw/` inside the notebook.
 - If the backend cannot find models: ensure `models/` contains the expected `.pkl` files and that `MODEL_DIR` points there.
-- If push fails due to large files: install Git LFS and move large files onto LFS as shown above.
 
 ## Default Admin Credentials (development)
 
 - Email: `admin@healthcare.com`
 - Password: `Admin@123`
 
-## Contributing
-
-- Run `git lfs install` before cloning/pulling if you expect to work with model artifacts.
-- Open an issue or PR describing changes. If you add or update notebooks, ensure they run end-to-end in sequence.
-
----
-
-If you want, I can also add a small helper script `scripts/run_notebooks.sh` and a `Makefile` entry to automate the notebook execution and model generation — tell me and I'll add them.
