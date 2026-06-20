@@ -14,11 +14,13 @@ backend/healthcare.db
 
 # Data files not required for app runtime
 data/raw/
-data/processed/*_clean.csv
+data/processed/*
 
 # Notebooks and local analysis
 notebooks/
 
+# Generated model artifacts
+models/*
 # Large model file excluded due to GitHub file size limits
 models/drug_rf_regressor.pkl
 
