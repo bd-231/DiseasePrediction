@@ -14,8 +14,8 @@ venv/
 backend/healthcare.db
 
 # Data files not required for app runtime
-data/raw/
-data/processed/*_clean.csv
+# Keep raw data in the repo, ignore processed/generated data
+data/processed/
 
 # Notebooks and local analysis
 
