@@ -28,10 +28,14 @@ def load_models():
     label_map = pd.read_csv(settings.DATA_DIR / "label_map.csv")
     idx_to_disease = dict(zip(label_map["encoded"], label_map["label"]))
 
-    print("Loading drug recommendation model...")
-    drug_regressor = joblib.load(settings.MODEL_DIR / "drug_rf_regressor.pkl")
-    drug_label_encoder = joblib.load(settings.MODEL_DIR / "drug_label_encoder.pkl")
-    cond_label_encoder = joblib.load(settings.MODEL_DIR / "cond_label_encoder.pkl")
+    import os
+    if os.getenv("RENDER") == "true" or os.getenv("LOW_MEMORY") == "true":
+        print("Skipping heavy drug recommendation models due to memory constraints...")
+    else:
+        print("Loading drug recommendation model...")
+        drug_regressor = joblib.load(settings.MODEL_DIR / "drug_rf_regressor.pkl")
+        drug_label_encoder = joblib.load(settings.MODEL_DIR / "drug_label_encoder.pkl")
+        cond_label_encoder = joblib.load(settings.MODEL_DIR / "cond_label_encoder.pkl")
 
     drug_stats_primary = pd.read_csv(settings.DATA_DIR / "drug_stats.csv")
     drug_stats_fallback = pd.read_csv(settings.DATA_DIR / "drug_stats_fallback.csv")
@@ -89,33 +93,37 @@ def recommend_medicines(
     if candidates is None or candidates.empty:
         return []
 
-    # Encode drug and condition for the regressor
-    candidates["drug_enc"] = candidates["drugName"].apply(
-        lambda x: (
-            drug_label_encoder.transform([x])[0]
-            if x in drug_label_encoder.classes_
-            else -1
+    if drug_regressor is not None:
+        # Encode drug and condition for the regressor
+        candidates["drug_enc"] = candidates["drugName"].apply(
+            lambda x: (
+                drug_label_encoder.transform([x])[0]
+                if x in drug_label_encoder.classes_
+                else -1
+            )
         )
-    )
-    candidates["cond_enc"] = candidates["condition"].apply(
-        lambda x: (
-            cond_label_encoder.transform([x])[0]
-            if x in cond_label_encoder.classes_
-            else -1
+        candidates["cond_enc"] = candidates["condition"].apply(
+            lambda x: (
+                cond_label_encoder.transform([x])[0]
+                if x in cond_label_encoder.classes_
+                else -1
+            )
         )
-    )
 
-    # Feature vector matches training: [drug_enc, cond_enc, log_useful, avg_rating, log_review_count]
-    # Note: avg_rating_grp in regressor_meta maps to avg_rating in drug_stats at inference
-    X_cand = candidates[
-        ["drug_enc", "cond_enc", "log_useful", "avg_rating", "log_review_count"]
-    ].values
-    candidates["predicted_rating"] = drug_regressor.predict(X_cand)
+        # Feature vector matches training: [drug_enc, cond_enc, log_useful, avg_rating, log_review_count]
+        X_cand = candidates[
+            ["drug_enc", "cond_enc", "log_useful", "avg_rating", "log_review_count"]
+        ].values
+        candidates["predicted_rating"] = drug_regressor.predict(X_cand)
 
-    # Weighted ranking score
-    candidates["final_score"] = (
-        alpha * candidates["predicted_rating"] + (1 - alpha) * candidates["avg_rating"]
-    )
+        # Weighted ranking score
+        candidates["final_score"] = (
+            alpha * candidates["predicted_rating"] + (1 - alpha) * candidates["avg_rating"]
+        )
+    else:
+        # Low-memory fallback: Use historical average ratings directly
+        candidates["predicted_rating"] = candidates["avg_rating"]
+        candidates["final_score"] = candidates["avg_rating"]
 
     # Filter out drugs matching patient allergies
     if allergies:
