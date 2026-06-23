@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'http://localhost:8000';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 export const PRIORITY_CONFIG = {
   critical: { label: 'Critical', emoji: '🔴', bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
   high: { label: 'High', emoji: '🟠', bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },

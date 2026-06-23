@@ -1,0 +1,14 @@
+{
+  "name": "DiseaseReco",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "postinstall": "cd frontend && npm install",
+    "backend": "cd backend && ../.venv/bin/python -m uvicorn app.main:app --reload --port 8000",
+    "frontend": "cd frontend && npm run dev",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
